@@ -3,6 +3,7 @@ const express = require("express");
 const cors = require("cors");
 const helmet = require("helmet");
 const errorHandler = require("./helpers/error-handler");
+const { getDBConnection } = require('./helpers/db');
 
 // config, helpers & middleware
 const config = require("./config/config");
@@ -13,10 +14,17 @@ app.use(helmet());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
+/* connection with db*/
+getDBConnection().then(res => {
+  console.log(res);
+}).catch(err => {
+  console.log(err);
+});
+
 /* registering routes */
 app.use("/api", require("./routes/index"));
 
-/* global error handeler*/
+/* global error handler*/
 app.use(errorHandler);
 
 /* creating server */
