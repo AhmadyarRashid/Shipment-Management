@@ -2,13 +2,18 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { AdminRoutingModule } from './admin-routing.module';
-
+import { AllWorkerComponent } from './all-worker/all-worker.component';
+import { AddWorkerComponent } from './add-worker/add-worker.component';
+import { AddShipmentComponent } from './add-shipment/add-shipment.component';
+import { AllShipmentComponent } from './all-shipment/all-shipment.component';
+import {AngularMaterialModule} from '../angular-material.module';
 
 @NgModule({
-  declarations: [],
+  declarations: [AllWorkerComponent, AddWorkerComponent, AddShipmentComponent, AllShipmentComponent],
   imports: [
     CommonModule,
-    AdminRoutingModule
+    AdminRoutingModule,
+    AngularMaterialModule
   ]
 })
 export class AdminModule { }

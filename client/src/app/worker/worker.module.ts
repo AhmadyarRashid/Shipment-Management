@@ -2,10 +2,11 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { WorkerRoutingModule } from './worker-routing.module';
+import { ManageShipmentComponent } from './manage-shipment/manage-shipment.component';
 
 
 @NgModule({
-  declarations: [],
+  declarations: [ManageShipmentComponent],
   imports: [
     CommonModule,
     WorkerRoutingModule
