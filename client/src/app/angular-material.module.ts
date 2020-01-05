@@ -20,7 +20,10 @@ import {
   MatTableModule,
   MatPaginatorModule,
   MatProgressBarModule,
-  MatDialogModule
+  MatDialogModule,
+  MatOptionModule,
+  MatAutocompleteModule,
+  MatCheckboxModule
 } from '@angular/material';
 
 @NgModule({
@@ -44,7 +47,11 @@ import {
     MatTableModule,
     MatPaginatorModule,
     MatProgressBarModule,
-    MatDialogModule
+    MatDialogModule,
+    MatSelectModule,
+    MatOptionModule,
+    MatAutocompleteModule,
+    MatCheckboxModule
   ],
   exports: [
     MatButtonModule,
@@ -64,7 +71,11 @@ import {
     MatTableModule,
     MatPaginatorModule,
     MatProgressBarModule,
-    MatDialogModule
+    MatDialogModule,
+    MatSelectModule,
+    MatOptionModule,
+    MatAutocompleteModule,
+    MatCheckboxModule
   ],
   providers: [
     MatDatepickerModule,

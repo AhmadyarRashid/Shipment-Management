@@ -7,9 +7,10 @@ import { AddWorkerComponent } from './add-worker/add-worker.component';
 import { AddShipmentComponent } from './add-shipment/add-shipment.component';
 import { AllShipmentComponent } from './all-shipment/all-shipment.component';
 import {AngularMaterialModule} from '../angular-material.module';
+import { AssignWorkersComponent } from './assign-workers/assign-workers.component';
 
 @NgModule({
-  declarations: [AllWorkerComponent, AddWorkerComponent, AddShipmentComponent, AllShipmentComponent],
+  declarations: [AllWorkerComponent, AddWorkerComponent, AddShipmentComponent, AllShipmentComponent, AssignWorkersComponent],
   imports: [
     CommonModule,
     AdminRoutingModule,

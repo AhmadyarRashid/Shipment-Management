@@ -1,0 +1,9 @@
+<mat-form-field>
+  <mat-label>Toppings</mat-label>
+  <mat-select multiple [(value)]="selectedToppings">
+    <mat-option *ngFor="let topping of toppingList" [value]="topping">{{topping}}</mat-option>
+  </mat-select>
+</mat-form-field>
+<br/>
+
+<button mat-raised-button (click)="close()" color="primary">Save</button>

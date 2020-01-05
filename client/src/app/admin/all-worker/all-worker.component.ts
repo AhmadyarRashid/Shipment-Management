@@ -5,7 +5,7 @@ import {MatTableDataSource} from '@angular/material/table';
 import {MatDialog, MatDialogConfig, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import {AddWorkerComponent} from '../add-worker/add-worker.component';
 
-export interface UserData {
+export interface WorkerSchema {
   id: string;
   name: string;
   email: string;
@@ -21,7 +21,7 @@ export interface UserData {
 export class AllWorkerComponent implements OnInit {
 
   displayedColumns: string[] = ['id', 'name', 'email', 'phoneNo', 'delete'];
-  dataSource: MatTableDataSource<UserData>;
+  dataSource: MatTableDataSource<WorkerSchema>;
   workers = [
     {id: '1', name: 'ali', email: 'ali@gmail.com', phoneNo: '03xx-xxxxxxx'},
     {id: '2', name: 'ali1', email: 'ali1@gmail.com', phoneNo: '03xx-xxxxxxx'},
@@ -64,7 +64,11 @@ export class AllWorkerComponent implements OnInit {
     dialogConfig.data = {name: 'some name'};
     const dialog = this.dialog.open(AddWorkerComponent, dialogConfig);
     dialog.afterClosed().subscribe(value => {
-      console.log(`Dialog sent: ${JSON.stringify(value)}`);
+      let maxId = this.dataSource.data[this.dataSource.data.length - 1].id;
+      // console.log(maxId);
+      const newData = this.dataSource.data.concat({...value, name: value.firstName + ' ' + value.lastName, id: Number(maxId ) + 1});
+      this.dataSource.data = newData;
+      // console.log(`Dialog sent: ${JSON.stringify(value)}`);
     });
   }
 }

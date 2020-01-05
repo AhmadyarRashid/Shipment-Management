@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit, Inject} from '@angular/core';
+import {MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 
 @Component({
   selector: 'app-add-shipment',
@@ -6,10 +7,22 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./add-shipment.component.css']
 })
 export class AddShipmentComponent implements OnInit {
+  dialogData: any;
 
-  constructor() { }
+  constructor(public dialogRef: MatDialogRef<AddShipmentComponent>, @Inject(MAT_DIALOG_DATA) public data: any) {
+  }
 
   ngOnInit() {
+    this.dialogData = this.data;
+    console.log(this.dialogData);
+  }
+
+  close() {
+    this.dialogData = {
+      name : 'extra',
+      description : 'xyz'
+    };
+    this.dialogRef.close(this.dialogData);
   }
 
 }
