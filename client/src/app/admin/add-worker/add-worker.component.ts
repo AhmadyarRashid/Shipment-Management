@@ -8,6 +8,13 @@ import {MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 })
 export class AddWorkerComponent implements OnInit {
   dialogData: any;
+  firstName: string;
+  lastName: string;
+  address: string;
+  city: string;
+  postalCode: string;
+  email: string;
+  password: string;
 
   constructor(public dialogRef: MatDialogRef<AddWorkerComponent>, @Inject(MAT_DIALOG_DATA) public data: any) {
   }
@@ -19,11 +26,15 @@ export class AddWorkerComponent implements OnInit {
 
   close() {
     this.dialogData = {
-      firstName : 'asd',
-      lastName : 'xyz',
-      phoneNo: '03xx-xxxxxxx',
-      email : 'asd@gmail.com'
-    }
+      firstName: this.firstName,
+      lastName: this.lastName,
+      phoneNo: '123',
+      email: this.email,
+      password: this.password,
+      city: this.city,
+      postalCode: this.postalCode,
+      address: this.address
+    };
     this.dialogRef.close(this.dialogData);
   }
 

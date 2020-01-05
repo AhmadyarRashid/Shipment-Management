@@ -8,6 +8,8 @@ import {MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 })
 export class AddShipmentComponent implements OnInit {
   dialogData: any;
+  name: string;
+  description: string;
 
   constructor(public dialogRef: MatDialogRef<AddShipmentComponent>, @Inject(MAT_DIALOG_DATA) public data: any) {
   }
@@ -19,8 +21,8 @@ export class AddShipmentComponent implements OnInit {
 
   close() {
     this.dialogData = {
-      name : 'extra',
-      description : 'xyz'
+      name: this.name,
+      description: this.description
     };
     this.dialogRef.close(this.dialogData);
   }

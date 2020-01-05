@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 
 import { AdminRoutingModule } from './admin-routing.module';
 import { AllWorkerComponent } from './all-worker/all-worker.component';
@@ -14,7 +15,9 @@ import { AssignWorkersComponent } from './assign-workers/assign-workers.componen
   imports: [
     CommonModule,
     AdminRoutingModule,
-    AngularMaterialModule
+    AngularMaterialModule,
+    FormsModule,
+    ReactiveFormsModule
   ]
 })
 export class AdminModule { }

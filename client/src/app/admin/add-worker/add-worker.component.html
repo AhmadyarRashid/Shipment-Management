@@ -2,12 +2,12 @@
   <tr>
     <td>
       <mat-form-field class="example-full-width">
-        <input matInput (ngModel)="data.firstName" placeholder="First name">
+        <input matInput type="text" [(ngModel)]="firstName"  placeholder="First name">
       </mat-form-field>
     </td>
     <td>
       <mat-form-field class="example-full-width">
-        <input matInput ngModel="data.lastName" placeholder="Last Name">
+        <input matInput type="text" [(ngModel)]="lastName" placeholder="Last Name">
       </mat-form-field>
     </td>
   </tr>
@@ -15,7 +15,7 @@
 
 <p>
   <mat-form-field class="example-full-width">
-    <textarea matInput placeholder="Address"></textarea>
+    <textarea matInput type="text" [(ngModel)]="address" placeholder="Address"></textarea>
   </mat-form-field>
 </p>
 
@@ -23,12 +23,12 @@
   <tr>
     <td>
       <mat-form-field class="example-full-width">
-        <input matInput placeholder="City">
+        <input matInput type="text" [(ngModel)]="city" placeholder="City">
       </mat-form-field>
     </td>
     <td>
       <mat-form-field class="example-full-width">
-        <input matInput #postalCode maxlength="5" placeholder="Postal Code">
+        <input matInput #postalCode maxlength="5" type="text" placeholder="Postal Code">
         <mat-hint align="end">{{postalCode.value.length}} / 5</mat-hint>
       </mat-form-field>
     </td>
@@ -38,13 +38,13 @@
 
 <p>
   <mat-form-field class="example-full-width">
-    <input matInput type="email" placeholder="Email"/>
+    <input matInput type="email" [(ngModel)]="email" placeholder="Email"/>
   </mat-form-field>
 </p>
 
 <p>
   <mat-form-field class="example-full-width">
-    <input matInput type="password" placeholder="Password"/>
+    <input matInput type="password" [(ngModel)]="password" placeholder="Password"/>
   </mat-form-field>
 </p>
 

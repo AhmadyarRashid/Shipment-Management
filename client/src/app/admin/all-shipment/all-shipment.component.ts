@@ -57,17 +57,21 @@ export class AllShipmentComponent implements OnInit {
   }
 
   handlerAssign(id) {
-    console.log('===== Assign shipment id ====', id);
+    // console.log('===== Assign shipment id ====', id);
     const dialogConfigAssign = new MatDialogConfig();
     dialogConfigAssign.data = {id};
     dialogConfigAssign.width = '500px';
     const dialogAssign = this.dialog.open(AssignWorkersComponent, dialogConfigAssign);
     dialogAssign.afterClosed().subscribe(value => {
-      // let maxId = this.dataSource.data[this.dataSource.data.length - 1].id;
-      // console.log(maxId);
-      // const newData = this.dataSource.data.concat({...value, id: Number(maxId) + 1, workers: [], status: false});
-      // this.dataSource.data = newData;
-      console.log(`-----Dialog sent: ${JSON.stringify(value)}`);
+      this.dataSource.data.map(item => {
+        if (item.id === value.id) {
+          item.workers = value.selected;
+          return item;
+        } else {
+          return item;
+        }
+      });
+      // console.log(`-----Dialog sent: ${JSON.stringify(value)}`);
     });
   }
 
@@ -80,7 +84,7 @@ export class AllShipmentComponent implements OnInit {
       console.log(maxId);
       const newData = this.dataSource.data.concat({...value, id: Number(maxId) + 1, workers: [], status: false});
       this.dataSource.data = newData;
-      console.log(`-----Dialog sent: ${JSON.stringify(value)}`);
+      // console.log(`-----Dialog sent: ${JSON.stringify(value)}`);
     });
   }
 
