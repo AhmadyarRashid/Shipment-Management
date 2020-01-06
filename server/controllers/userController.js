@@ -5,9 +5,73 @@ const bcrypt = require("bcryptjs");
 const db = require("../helpers/db");
 const { getFailureResponse, getSuccessResponse } = require("../helpers/response");
 
+// import schema
+const user = require('../models/user');
+const { generateHash } = require('../helpers/crypt');
+
 // Load input validation
 const validateRegisterInput = require("../validation/register");
 const validateLoginInput = require("../validation/login");
+
+
+module.exports.registerWorker = async (req, res, next) => {
+    // console.log('--- registerWorker -- >', req.body);
+
+    const { name, phoneNo, email, password, city, address } = req.body;
+    let encryptPassword;
+    if (password) {
+        try {
+            encryptPassword = await generateHash(password)
+        } catch (e) {
+            console.log(e);
+        }
+    }
+    user.create({
+        name,
+        email,
+        password: encryptPassword,
+        city,
+        address,
+        phoneNo
+    })
+        .then(doc => {
+            console.log('----- saved ----', doc);
+            res.status(200).json(getSuccessResponse(doc))
+        })
+        .catch(err => {
+            console.log('---- err -----', err);
+            res.status(200).json(getFailureResponse('Some thing failed during insert user data'));
+        });
+}
+
+module.exports.getAllWorker = (req, res, next) => {
+    // console.log('---- get all worker ---');
+    user.find({})
+        .then(doc => {
+            res.status(200).json(getSuccessResponse(doc));
+        })
+        .catch(err => {
+            res.status(200).json(getFailureResponse('Some thing failed during fetch user data'));
+        });
+}
+
+module.exports.deleteWorker = (req, res, next) => {
+    console.log('--- delete user ---', req.body);
+    user.findOneAndDelete({ _id: req.body.id })
+        .then(doc => {
+            if (!doc) {
+                return res.status(404).send({
+                    message: "Note not found with id " + req.body.id
+                });
+            }
+            res.send({ message: "Note deleted successfully!" });
+        })
+        .catch(err => {
+            return res.status(500).send({
+                message: "Could not delete note with id "
+            });
+        });
+}
 
 module.exports.authenticate = function authenticate(req, res, next) {
     try {
@@ -108,47 +172,3 @@ module.exports.register = function register(req, res, next) {
             res.status(200).json(getFailureResponse());
         });
 };
-
-module.exports.getAllUsers = function (req, res, next) {
-    try {
-        db.executeQuery("Select u.* , d.department_name from users u join departments d on u.department_id=d.department_id")
-            .then(rows => {
-                return res.status(200).json(getSuccessResponse(rows))
-            })
-            .catch(err => {
-                console.log(err)
-                return res.status(200).json(getFailureResponse());
-            });
-    }
-    catch (ex) {
-        console.log(ex)
-        res.status(400).json(getFailureResponse());
-    }
-};
-
-module.exports.deActivateUser = function (req, res, next) {
-    try {
-        db.executeQuery("Update users set active=? where user_id=?", [false, req.params.id])
-            .then(rows => {
-                return res.status(200).json(getSuccessResponse())
-            })
-            .catch(err => {
-                console.log(err)
-                return res.status(200).json(getFailureResponse());
-            });
-    }
-    catch (ex) {
-        console.log(ex)
-        res.status(400).json(getFailureResponse());
-    }
-};
-
-function logLastLogin(user_id) {
-    db.executeQuery("UPDATE users set user_last_login=? where user_id=?", [new Date(), user_id])
-        .then(row => {
-
-        })
-        .catch(err => {
-            console.log(err);
-        })
-}

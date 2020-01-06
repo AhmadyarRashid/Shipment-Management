@@ -1,4 +1,7 @@
 var mongoose = require('mongoose');
+const crypto = require('crypto');
+const jwt = require('jsonwebtoken');
+
 const Schema = mongoose.Schema;
 
 var userSchema = new Schema({
@@ -6,6 +9,12 @@ var userSchema = new Schema({
         type: String
     },
     phoneNo: {
+        type: String
+    },
+    city: {
+        type: String
+    },
+    address: {
         type: String
     },
     email: {

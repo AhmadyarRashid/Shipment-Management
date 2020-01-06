@@ -1,7 +1,7 @@
 <mat-form-field>
-  <mat-label>Toppings</mat-label>
-  <mat-select multiple [(value)]="selectedToppings">
-    <mat-option *ngFor="let topping of toppingList" [value]="topping">{{topping}}</mat-option>
+  <mat-label>Workers</mat-label>
+  <mat-select multiple [(value)]="selectedWorkers">
+    <mat-option *ngFor="let worker of workers" [value]="worker._id">{{worker.name}}</mat-option>
   </mat-select>
 </mat-form-field>
 <br/>

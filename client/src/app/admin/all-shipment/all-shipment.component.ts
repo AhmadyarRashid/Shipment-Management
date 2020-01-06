@@ -6,6 +6,8 @@ import {MatDialog, MatDialogConfig, MatDialogRef, MAT_DIALOG_DATA} from '@angula
 import {AddShipmentComponent} from '../add-shipment/add-shipment.component';
 import {AssignWorkersComponent} from '../assign-workers/assign-workers.component';
 import {FormControl} from '@angular/forms';
+import {ShipmentService} from '../../shared/shipment.service';
+import {UserService} from '../../shared/user.service';
 
 export interface ShipmentSchema {
   id: string;
@@ -22,30 +24,40 @@ export interface ShipmentSchema {
 })
 export class AllShipmentComponent implements OnInit {
 
-  displayedColumns: string[] = ['id', 'name', 'description', 'workers', 'action'];
+  displayedColumns: string[] = ['id', 'name', 'description', 'status', 'action'];
   toppings = new FormControl();
   toppingList: string[] = ['Extra cheese', 'Mushroom', 'Onion', 'Pepperoni', 'Sausage', 'Tomato'];
   dataSource: MatTableDataSource<ShipmentSchema>;
 
-  shipments = [
-    {id: '1', name: 'laptops', description: '', workers: ['a', 'b', 'c', 'd'], status: false},
-    {id: '2', name: 'bags', description: '', workers: [], status: false},
-    {id: '3', name: 'cars', description: '', workers: [], status: false},
-    {id: '4', name: 'boxes', description: '', workers: [], status: false},
-    {id: '5', name: 'pens', description: '', workers: [], status: false},
-  ];
+  shipments = [];
+  allWorkers = [];
 
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   @Inject(MAT_DIALOG_DATA) public data: any;
 
-  constructor(public dialog: MatDialog) {
+  constructor(public dialog: MatDialog, private shipmentService: ShipmentService, private userService: UserService) {
     this.dataSource = new MatTableDataSource(this.shipments);
   }
 
   ngOnInit() {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
+    this.getAllShipments();
+    this.getAllWorkers();
+  }
+
+  getAllShipments() {
+    this.shipmentService.getAllShipments().subscribe(res => {
+      console.log('--- get all shipments --', res['data']);
+      this.dataSource.data = res['data'];
+    });
+  }
+
+  getAllWorkers() {
+    this.userService.getAllWorker().subscribe(res => {
+      this.allWorkers = res['data'];
+    });
   }
 
   applyFilter(filterValue: string) {
@@ -57,35 +69,37 @@ export class AllShipmentComponent implements OnInit {
   }
 
   handlerAssign(id) {
-    // console.log('===== Assign shipment id ====', id);
     const dialogConfigAssign = new MatDialogConfig();
-    dialogConfigAssign.data = {id};
+    const prevWorkerIds = this.dataSource.data.filter(item => item['_id'] == id)[0]['workers'];
+    const workers = this.allWorkers;
+    dialogConfigAssign.data = {id, prevWorkerIds, workers};
+
     dialogConfigAssign.width = '500px';
     const dialogAssign = this.dialog.open(AssignWorkersComponent, dialogConfigAssign);
     dialogAssign.afterClosed().subscribe(value => {
-      this.dataSource.data.map(item => {
-        if (item.id === value.id) {
-          item.workers = value.selected;
-          return item;
-        } else {
-          return item;
-        }
-      });
-      // console.log(`-----Dialog sent: ${JSON.stringify(value)}`);
+      if (value) {
+        this.shipmentService.assignWorkers(value.id, value.selected).subscribe(res => {
+          this.getAllShipments();
+        });
+      }
     });
   }
 
   addShipmentHandler() {
     const dialogConfig = new MatDialogConfig();
-    dialogConfig.data = {name: 'some name'};
     const dialog = this.dialog.open(AddShipmentComponent, dialogConfig);
     dialog.afterClosed().subscribe(value => {
-      let maxId = this.dataSource.data[this.dataSource.data.length - 1].id;
-      console.log(maxId);
-      const newData = this.dataSource.data.concat({...value, id: Number(maxId) + 1, workers: [], status: false});
-      this.dataSource.data = newData;
-      // console.log(`-----Dialog sent: ${JSON.stringify(value)}`);
+      this.shipmentService.addShipment(value['name'], value['description']).subscribe(res => {
+        this.getAllShipments();
+      });
     });
+  }
+
+  deleteShipmentHandler(id) {
+    this.shipmentService.deleteShipment(id)
+      .subscribe(res => {
+        this.getAllShipments();
+      });
   }
 
 }

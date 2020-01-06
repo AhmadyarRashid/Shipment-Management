@@ -4,45 +4,54 @@ import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
 import {MatDialog, MatDialogConfig, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import {AddWorkerComponent} from '../add-worker/add-worker.component';
+import {UserService} from '../../shared/user.service';
 
 export interface WorkerSchema {
-  id: string;
+  _id: string;
   name: string;
   email: string;
   phoneNo: string;
 }
-
 
 @Component({
   selector: 'app-all-worker',
   templateUrl: './all-worker.component.html',
   styleUrls: ['./all-worker.component.css']
 })
+
 export class AllWorkerComponent implements OnInit {
 
-  displayedColumns: string[] = ['id', 'name', 'email', 'phoneNo', 'delete'];
+  displayedColumns: string[] = ['_id', 'name', 'email', 'phoneNo', 'delete'];
   dataSource: MatTableDataSource<WorkerSchema>;
-  workers = [
-    {id: '1', name: 'ali', email: 'ali@gmail.com', phoneNo: '03xx-xxxxxxx'},
-    {id: '2', name: 'ali1', email: 'ali1@gmail.com', phoneNo: '03xx-xxxxxxx'},
-    {id: '3', name: 'ali2', email: 'ali2@gmail.com', phoneNo: '03xx-xxxxxxx'},
-    {id: '4', name: 'ali3', email: 'ali3@gmail.com', phoneNo: '03xx-xxxxxxx'},
-    {id: '5', name: 'ali4', email: 'ali4@gmail.com', phoneNo: '03xx-xxxxxxx'},
-    {id: '6', name: 'ali5', email: 'ali5@gmail.com', phoneNo: '03xx-xxxxxxx'},
-    {id: '7', name: 'ali6', email: 'ali6@gmail.com', phoneNo: '03xx-xxxxxxx'}
-  ];
+  workers = [];
 
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   @Inject(MAT_DIALOG_DATA) public data: any;
 
-  constructor(public dialog: MatDialog) {
+  constructor(public dialog: MatDialog, private userService: UserService) {
     this.dataSource = new MatTableDataSource(this.workers);
   }
 
   ngOnInit() {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
+    this.getAllWorker();
+  }
+
+  getAllWorker() {
+    this.userService.getAllWorker().subscribe(
+      result => {
+        // Handle result
+        this.dataSource.data = result['data'];
+      },
+      error => {
+        // this.errors = error;
+      },
+      () => {
+        // 'onCompleted' callback.
+      }
+    );
   }
 
   applyFilter(filterValue: string) {
@@ -55,8 +64,10 @@ export class AllWorkerComponent implements OnInit {
 
   handlerDelete(id) {
     console.log('--- delete user id ---', id);
-    const filterResult = this.dataSource.data.filter(item => item.id !== id);
-    this.dataSource.data = filterResult;
+    this.userService.deleteWorker(id).subscribe(res => {
+      console.log(res);
+      this.getAllWorker();
+    });
   }
 
   addWorkerHandler() {
@@ -64,11 +75,11 @@ export class AllWorkerComponent implements OnInit {
     dialogConfig.data = {name: 'some name'};
     const dialog = this.dialog.open(AddWorkerComponent, dialogConfig);
     dialog.afterClosed().subscribe(value => {
-      let maxId = this.dataSource.data[this.dataSource.data.length - 1].id;
-      // console.log(maxId);
-      const newData = this.dataSource.data.concat({...value, name: value.firstName + ' ' + value.lastName, id: Number(maxId ) + 1});
-      this.dataSource.data = newData;
-      // console.log(`Dialog sent: ${JSON.stringify(value)}`);
+      const workerData = {...value, name: value.firstName + ' ' + value.lastName};
+      this.userService.registerWorker(workerData).subscribe(res => {
+        console.log('---- register user ---', res);
+        this.getAllWorker();
+      });
     });
   }
 }

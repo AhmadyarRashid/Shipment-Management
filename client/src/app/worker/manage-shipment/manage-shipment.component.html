@@ -11,7 +11,7 @@
       <!-- ID Column -->
       <ng-container matColumnDef="id">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> ID</th>
-        <td mat-cell *matCellDef="let row"> {{row.id}} </td>
+        <td mat-cell *matCellDef="let row; let i = index"> {{i + 1}} </td>
       </ng-container>
 
       <!-- Progress Column -->
@@ -29,7 +29,7 @@
       <!-- Color Column -->
       <ng-container matColumnDef="action">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> Assign</th>
-        <td mat-cell *matCellDef="let row" >
+        <td mat-cell *matCellDef="let row" (click)="handlerDelete(row._id)"  >
           <button mat-flat-button  color="primary">update</button>
         </td>
       </ng-container>

@@ -10,7 +10,8 @@ import {AdminModule} from './admin/admin.module';
 import {WorkerModule} from './worker/worker.module';
 import {LoginComponent} from './login/login.component';
 import {PageNotFoundComponent} from './page-not-found/page-not-found.component';
-import { ConfirmDialoComponent } from './confirm-dialo/confirm-dialo.component';
+import {ConfirmDialoComponent} from './confirm-dialo/confirm-dialo.component';
+import {HttpClientModule} from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -27,7 +28,8 @@ import { ConfirmDialoComponent } from './confirm-dialo/confirm-dialo.component';
     BrowserAnimationsModule,
     AngularMaterialModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]

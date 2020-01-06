@@ -8,8 +8,8 @@ import {FormControl} from '@angular/forms';
   styleUrls: ['./assign-workers.component.css']
 })
 export class AssignWorkersComponent implements OnInit {
-  selectedToppings: any;
-  toppingList: string[] = ['Extra cheese', 'Mushroom', 'Onion', 'Pepperoni', 'Sausage', 'Tomato'];
+  selectedWorkers: any;
+  workers: any;
   dialogData: any;
   id: any;
 
@@ -19,12 +19,14 @@ export class AssignWorkersComponent implements OnInit {
   ngOnInit() {
     this.dialogData = this.data;
     this.id = this.data.id;
-    console.log(this.dialogData);
+    this.selectedWorkers = this.data.prevWorkerIds;
+    this.workers = this.data.workers;
+    console.log('----' , this.dialogData);
   }
 
   close() {
-    console.log('selected list', this.selectedToppings);
-    this.dialogRef.close({selected: this.selectedToppings, id: this.id});
+    console.log('selected list', this.selectedWorkers);
+    this.dialogRef.close({selected: this.selectedWorkers, id: this.id});
   }
 
 }

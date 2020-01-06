@@ -1,10 +1,10 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
-import {ConfirmDialoComponent, ConfirmDialogModel} from '../../confirm-dialo/confirm-dialo.component';
-import { MatDialog } from '@angular/material';
+import {MatDialog} from '@angular/material';
+import {ShipmentService} from '../../shared/shipment.service';
 
 export interface ShipmentSchema {
-  id: string;
+  _id: string;
   name: string;
   description: string;
   status: boolean;
@@ -18,25 +18,28 @@ export interface ShipmentSchema {
 export class ManageShipmentComponent implements OnInit {
 
   displayedColumns: string[] = ['id', 'name', 'description', 'action'];
-  shipments = [
-    {id: '1', name: 'laptops', description: '', status: false},
-    {id: '2', name: 'bags', description: '', status: false},
-    {id: '3', name: 'cars', description: '', status: false},
-    {id: '4', name: 'boxes', description: '', status: false},
-    {id: '5', name: 'pens', description: '', status: false},
-  ];
+  shipments = [];
   dataSource: MatTableDataSource<ShipmentSchema>;
+  userId: string;
 
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
 
-  constructor(public dialog: MatDialog) {
+  constructor(public dialog: MatDialog, private shipmentService: ShipmentService) {
     this.dataSource = new MatTableDataSource(this.shipments);
   }
 
   ngOnInit() {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
+    this.userId = '5e1388bb370c916638ab9200';
+    this.getAllOpenShipments(this.userId);
+  }
+
+  getAllOpenShipments(id) {
+    this.shipmentService.getAllShipmentsByUserId(id).subscribe(res => {
+      this.dataSource.data = res['data'];
+    });
   }
 
   applyFilter(filterValue: string) {
@@ -47,19 +50,9 @@ export class ManageShipmentComponent implements OnInit {
     }
   }
 
-  onUpdate() {
-    const message = `Are you sure you want to do this?`;
-
-    const dialogData = new ConfirmDialogModel('Confirm Action', message);
-
-    const dialogRef = this.dialog.open(ConfirmDialoComponent, {
-      maxWidth: '700px',
-      data: dialogData
-    });
-
-    dialogRef.afterClosed().subscribe(dialogResult => {
-      // this.result = dialogResult;
-      console.log('confirm messgae ---' , dialogResult );
+  handlerDelete(id) {
+    this.shipmentService.updateShipmentStatus(id, false).subscribe(res => {
+      this.getAllOpenShipments(this.userId);
     });
   }
 

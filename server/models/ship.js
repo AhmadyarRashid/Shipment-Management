@@ -2,16 +2,23 @@ var mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 var shipmentSchema = new Schema({
-    _id: {
-        type: String
+    name: {
+        type: String,
+        default: ''
+    },
+    description: {
+        type: String,
+        default: ''
     },
     status : {
-        type: Boolean
+        type: Boolean,
+        default: true
     },
     created_at: {
-        type: String
+        type: String,
+        default: new Date()
     },
-    users: {
+    workers: {
         type: Array,
         default : []
     }
