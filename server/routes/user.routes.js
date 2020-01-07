@@ -5,8 +5,8 @@ const { authenticateAdmin } = require('../helpers/auth');
 
 // routes
 router.post('/login', userController.login);
-router.post('/registerWorker', userController.registerWorker);
-router.get('/getAllWorker', userController.getAllWorker);
-router.post('/deleteWorker', userController.deleteWorker);
+router.post('/registerWorker', authenticateAdmin, userController.registerWorker);
+router.get('/getAllWorker', authenticateAdmin, userController.getAllWorker);
+router.post('/deleteWorker', authenticateAdmin, userController.deleteWorker);
 
 module.exports = router;

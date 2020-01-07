@@ -1,14 +1,14 @@
 const express = require('express');
 const router = express.Router();
 const shipmentController = require('../controllers/shipmentController');
-const {authenticateAdmin, authenticateWorker} = require('../helpers/auth');
+const { authenticateAdmin, authenticateWorker } = require('../helpers/auth');
 
-router.get('/getAllShipments', shipmentController.getAllShipments);
-router.post('/addShipment', shipmentController.addShipment);
-router.post('/assignWorkers', shipmentController.assignWorkers);
-router.post('/deleteShipment', shipmentController.deleteShipment);
+router.get('/getAllShipments', authenticateAdmin, shipmentController.getAllShipments);
+router.post('/addShipment', authenticateAdmin, shipmentController.addShipment);
+router.post('/assignWorkers', authenticateAdmin, shipmentController.assignWorkers);
+router.post('/deleteShipment', authenticateAdmin, shipmentController.deleteShipment);
 
-router.get('/getAllShipmentsByUserId/:id', shipmentController.getAllShipmentsByUserId);
-router.post('/updateShipmentStatus', shipmentController.updateShipmentStatus);
+router.get('/getAllShipmentsByUserId/:id', authenticateWorker, shipmentController.getAllShipmentsByUserId);
+router.post('/updateShipmentStatus', authenticateWorker, shipmentController.updateShipmentStatus);
 
 module.exports = router;

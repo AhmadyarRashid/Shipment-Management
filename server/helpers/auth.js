@@ -3,11 +3,15 @@ const { getFailureResponse, getSuccessResponse } = require('./response');
 const user = require('../models/user');
 
 const getTokenFromHeaders = (req) => {
-  const { headers: { authorization } } = req;
-  console.log('---- get header ---' , headers , authorization);
+  // const { headers } = req;
+  // console.log('--- header ---', req.get('Authorization'), headers);
+  // console.log('--- hello');
+  // const { headers: { Authorization } } = req;
+  // console.log('---- get header ---',  Authorization);
+  const auth = req.get('Authorization');
 
-  if (authorization && authorization.split(' ')[0] === 'Token') {
-    return authorization.split(' ')[1];
+  if (auth && auth.split(' ')[0] == 'Token') {
+    return auth.split(' ')[1];
   }
   return null;
 };
@@ -29,9 +33,9 @@ const authenticateWorker = (req, res, next) => {
 }
 
 const authenticateAdmin = (req, res, next) => {
-  
+  // console.log('----- hello in auth ----');
   const tokenH = getTokenFromHeaders(req);
-  console.log('----- authentication ----' , tokenH);
+  // console.log('----- authentication ----', tokenH);
   if (tokenH == null) {
     res.status(404).json(getFailureResponse('authentication failed'));
   } else {

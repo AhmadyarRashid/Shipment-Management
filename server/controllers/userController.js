@@ -19,7 +19,7 @@ module.exports.login = (req, res, next) => {
 
                     user.findOneAndUpdate({ _id: tokenReponse._id }, { $push: { token: tokenReponse.token } })
                         .then(doc1 => {
-                            res.status(200).json(getSuccessResponse({ ...tokenReponse, role: doc.role}));
+                            res.status(200).json(getSuccessResponse({ ...tokenReponse, role: doc.role }));
                         })
                         .catch(err => {
                             res.status(200).json(getFailureResponse('Please try again'));
@@ -50,7 +50,8 @@ module.exports.registerWorker = async (req, res, next) => {
 }
 
 module.exports.getAllWorker = (req, res, next) => {
-    user.find({role: 'worker'})
+    
+    user.find({ role: 'worker' })
         .then(doc => {
             res.status(200).json(getSuccessResponse(doc));
         })
