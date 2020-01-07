@@ -21,6 +21,11 @@ getDBConnection().then(res => {
   console.log(err);
 });
 
+// Add models
+require('./models/user');
+require('./models/ship');
+require('./config/passport');
+
 /* registering routes */
 app.use("/api", require("./routes/index"));
 
