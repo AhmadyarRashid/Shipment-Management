@@ -65,15 +65,29 @@ module.exports.getAllShipmentsByUserId = (req, res, next) => {
 module.exports.updateShipmentStatus = (req, res, next) => {
     const { id, status } = req.body;
 
-    const random = Math.floor(Math.random() * 60) + 1;
-    setTimeout(() => {
-        shipment.findOneAndUpdate({ _id: id }, { $set: { status: status } })
-            .then(doc => {
-                res.status(200).json(getSuccessResponse(doc));
-            })
-            .catch(err => {
-                res.status(200).json(getFailureResponse('error on get shipment by user id'))
-            });
-    }, random * 1000);
-
+    shipment.findOne({_id : id, status: true})
+        .then(doc => {
+            
+            console.log('-- doc ---', doc);
+            if(doc == null){
+                res.status(200).json(getFailureResponse('Shipment is already closed'));
+            }else{
+                const random = Math.floor(Math.random() * 60) + 1;
+                setTimeout(() => {
+                    shipment.findOneAndUpdate({ _id: id }, { $set: { status: status } })
+                        .then(doc => {
+                            res.status(200).json(getSuccessResponse(doc));
+                        })
+                        .catch(err => {
+                            res.status(200).json(getFailureResponse('error on get shipment by user id'))
+                        });
+                }, random * 1000);
+            }
+            
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(200).json(getFailureResponse('Shipment is already closed'));
+        });
+   
 };

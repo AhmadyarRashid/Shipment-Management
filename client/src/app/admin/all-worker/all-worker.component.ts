@@ -5,6 +5,7 @@ import {MatTableDataSource} from '@angular/material/table';
 import {MatDialog, MatDialogConfig, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import {AddWorkerComponent} from '../add-worker/add-worker.component';
 import {UserService} from '../../shared/user.service';
+import Swal from 'sweetalert2';
 
 export interface WorkerSchema {
   _id: string;
@@ -64,9 +65,28 @@ export class AllWorkerComponent implements OnInit {
 
   handlerDelete(id) {
     console.log('--- delete user id ---', id);
-    this.userService.deleteWorker(id).subscribe(res => {
-      console.log(res);
-      this.getAllWorker();
+
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'You won\'t be able to revert this!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete it!'
+    }).then((result) => {
+      if (result.value) {
+
+        this.userService.deleteWorker(id).subscribe(res => {
+          console.log(res);
+          Swal.fire(
+            'Deleted!',
+            'Your data has been deleted.',
+            'success'
+          );
+          this.getAllWorker();
+        });
+      }
     });
   }
 

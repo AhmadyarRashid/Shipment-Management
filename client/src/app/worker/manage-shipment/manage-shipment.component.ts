@@ -4,6 +4,8 @@ import {MatDialog} from '@angular/material';
 import {ShipmentService} from '../../shared/shipment.service';
 import {UserService} from '../../shared/user.service';
 import {Router} from '@angular/router';
+import swal from 'sweetalert2';
+
 export interface ShipmentSchema {
   _id: string;
   name: string;
@@ -22,6 +24,7 @@ export class ManageShipmentComponent implements OnInit {
   shipments = [];
   dataSource: MatTableDataSource<ShipmentSchema>;
   userId: string;
+  error: string;
 
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
@@ -33,6 +36,7 @@ export class ManageShipmentComponent implements OnInit {
   ngOnInit() {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
+    this.error = null;
     this.userId = localStorage.getItem('id');
     this.getAllOpenShipments(this.userId);
   }
@@ -51,13 +55,30 @@ export class ManageShipmentComponent implements OnInit {
     }
   }
 
-  handlerDelete(id) {
+  updateShipment(id) {
     this.shipmentService.updateShipmentStatus(id, false).subscribe(res => {
+      console.log(res);
+      if (res['isSuccess'] === false) {
+        this.error = res['message'];
+        swal.fire({
+          title: 'Error!',
+          text: this.error,
+          icon: 'error',
+          confirmButtonText: 'Ok'
+        });
+      } else if(res['isSuccess'] === true) {
+        swal.fire({
+          icon: 'success',
+          title: 'Shipment is closed successfully',
+          showConfirmButton: false,
+          timer: 1500
+        });
+      }
       this.getAllOpenShipments(this.userId);
     });
   }
 
-  logoutHandler(){
+  logoutHandler() {
     this.userService.logout().subscribe(res => {
 
     }, err => {
