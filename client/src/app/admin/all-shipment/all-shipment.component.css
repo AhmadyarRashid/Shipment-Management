@@ -20,6 +20,10 @@ mat-toolbar{
   margin-top: 15px;
 }
 
-button{
+.addBtn{
   float: right;
+}
+
+.actionCol{
+  display: flex;
 }

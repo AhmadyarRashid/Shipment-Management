@@ -32,7 +32,7 @@ export class ManageShipmentComponent implements OnInit {
   ngOnInit() {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
-    this.userId = '5e1388bb370c916638ab9200';
+    this.userId = '5e1417a3642877228cb012f1';
     this.getAllOpenShipments(this.userId);
   }
 
