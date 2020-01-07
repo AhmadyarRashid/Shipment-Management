@@ -19,10 +19,11 @@ export class AddShipmentComponent implements OnInit {
     console.log(this.dialogData);
   }
 
-  close() {
+  addSubmitHandler(value) {
+    console.log('---- form submit ---' , value);
     this.dialogData = {
-      name: this.name,
-      description: this.description
+      name: value.destination,
+      description: value.description
     };
     this.dialogRef.close(this.dialogData);
   }

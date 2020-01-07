@@ -1,0 +1,27 @@
+.sidenav{
+  background: #384452;
+  color: white;
+  width: 200px;
+}
+
+mat-toolbar{
+  background-color: #384452;
+  color: white;
+}
+
+.title{
+  font-size: 20px;
+}
+
+mat-icon{
+  margin-right: 12px;
+}
+
+.example-container{
+  height: 100%;
+}
+
+.item{
+  margin-left: 15px;
+}
+

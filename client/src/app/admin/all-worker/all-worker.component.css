@@ -3,23 +3,24 @@ table {
 }
 
 .mat-form-field {
-  font-size: 14px;
-  width: 100%;
+  font-size: 12px;
+  width: 20%;
 }
 
 td, th {
   width: 25%;
 }
 
-mat-toolbar{
-  background-color: #384452;
-  color: white;
-}
-
 .container{
   margin-top: 15px;
 }
 
-button{
+.addButton{
   float: right;
 }
+
+.icon{
+  margin-top: 8px;
+}
+
+

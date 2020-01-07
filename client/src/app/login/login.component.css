@@ -7,11 +7,19 @@ input[type="button"] {
 
 .left-panel {
   width: 350px;
-  background-color: #385B7F;
+  background-color: #384452;
+  color: white;
   height: 100%;
-  position: fixed;
+  position: absolute;
   margin: 0;
   bottom: 0;
+}
+
+h1{
+  margin: 0 auto;
+  vertical-align: middle;
+  padding: 20%;
+  text-align: center;
 }
 
 .right-panel {
@@ -45,7 +53,7 @@ input[type="button"] {
 
 a {
   text-decoration: none;
-  color: #0094cd;
+  color: #384452;
   font-family: 'Tw Cen Mt'
 }
 
@@ -76,7 +84,7 @@ h1 {
 }
 
 .input-group {
-  border-bottom: 1px solid #CBD5E1;
+  border-bottom: 1px solid #384452;
   margin-bottom: 20px;
 }
 
@@ -88,7 +96,7 @@ h1 {
 }
 
 .input-group-addon i {
-  color: #7F8FA4;
+  color: #384452;
 }
 
 
@@ -99,11 +107,11 @@ input {
   border-color: #CBD5E1;
   padding: 10px 0;
   border-radius: 0px;
-  color: #7F8FA4;
+  color: #384452;
 }
 
 input::placeholder {
-  color: #A3B2C7;
+  color: #384452;
   font-weight: 200;
   letter-spacing: 1.2px;
 }
@@ -129,7 +137,7 @@ input::focus {
   width: 100%;
   border: 0px;
   border-radius: 4px;
-  background-color: #24A7F8;
+  background-color: #384452;
   font-size: 1.2em;
   color: white;
   font-family: "Open Sans";
@@ -143,7 +151,7 @@ input::focus {
   width: 10%;
   padding: 10px;
   border: 0;
-  background: #0094cd;
+  background: #384452;
   font-size: 1.2em;
   color: white;
 }
@@ -159,13 +167,13 @@ input::focus {
 }
 
 .f-pass a {
-  color: #7F8FA4;
+  color: #384452;
   font-family: "Open Sans";
   font-size: 12px;
 }
 
 .f-pass a:hover {
-  color: #24A7F8;
+  color: #384452;
 }
 
 .open-id ul {
@@ -175,7 +183,7 @@ input::focus {
 }
 
 .open-id {
-  color: #7F8FA4;
+  color: #384452;
   font-family: "Open Sans";
   font-size: 12px;
 }
@@ -196,7 +204,7 @@ input::focus {
 
 .footer {
   margin-top: 30px;
-  color: #7F8FA4;
+  color: #384452;
   font-family: "Open Sans";
   font-size: 10px;
   line-height: 24px;

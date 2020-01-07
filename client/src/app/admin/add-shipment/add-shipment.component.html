@@ -1,14 +1,16 @@
-<p>
-  <mat-form-field class="example-full-width">
-    <input matInput type="text" [(ngModel)]="name" placeholder="Name"/>
-  </mat-form-field>
-</p>
+<form #shipForm="ngForm" (submit)="addSubmitHandler(shipForm.value)">
+  <p>
+    <mat-form-field class="example-full-width">
+      <input matInput type="text" name="destination" placeholder="Destination" minlength="3" required ngModel/>
+    </mat-form-field>
+  </p>
 
-<p>
-  <mat-form-field class="example-full-width">
-    <input matInput type="text" [(ngModel)]="description" placeholder="Description"/>
-  </mat-form-field>
-</p>
+  <p>
+    <mat-form-field class="example-full-width">
+      <textarea matInput type="text" name="description" placeholder="Description" minlength="8"
+                required ngModel></textarea>
+    </mat-form-field>
+  </p>
 
-<button mat-flat-button (click)="close()" color="primary">Save</button>
-
+  <button mat-flat-button type="submit" color="primary">Save</button>
+</form>

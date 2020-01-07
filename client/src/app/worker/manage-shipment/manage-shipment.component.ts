@@ -2,7 +2,8 @@ import {Component, OnInit, ViewChild} from '@angular/core';
 import {MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
 import {MatDialog} from '@angular/material';
 import {ShipmentService} from '../../shared/shipment.service';
-
+import {UserService} from '../../shared/user.service';
+import {Router} from '@angular/router';
 export interface ShipmentSchema {
   _id: string;
   name: string;
@@ -25,14 +26,14 @@ export class ManageShipmentComponent implements OnInit {
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
 
-  constructor(public dialog: MatDialog, private shipmentService: ShipmentService) {
+  constructor(public dialog: MatDialog, private shipmentService: ShipmentService, private  userService: UserService, private  router: Router) {
     this.dataSource = new MatTableDataSource(this.shipments);
   }
 
   ngOnInit() {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
-    this.userId = '5e1388bb370c916638ab9200';
+    this.userId = localStorage.getItem('id');
     this.getAllOpenShipments(this.userId);
   }
 
@@ -53,6 +54,19 @@ export class ManageShipmentComponent implements OnInit {
   handlerDelete(id) {
     this.shipmentService.updateShipmentStatus(id, false).subscribe(res => {
       this.getAllOpenShipments(this.userId);
+    });
+  }
+
+  logoutHandler(){
+    this.userService.logout().subscribe(res => {
+
+    }, err => {
+
+    }, () => {
+      localStorage.setItem('token', '');
+      localStorage.setItem('id', '');
+      localStorage.setItem('role', '');
+      this.router.navigate(['../login']);
     });
   }
 

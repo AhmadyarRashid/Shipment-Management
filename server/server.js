@@ -4,6 +4,7 @@ const cors = require("cors");
 const helmet = require("helmet");
 const errorHandler = require("./helpers/error-handler");
 const { getDBConnection } = require('./helpers/db');
+const { createAdminIfNot } = require('./utils/adminCreate');
 
 // config, helpers & middleware
 const config = require("./config/config");
@@ -21,10 +22,8 @@ getDBConnection().then(res => {
   console.log(err);
 });
 
-// Add models
-require('./models/user');
-require('./models/ship');
-require('./config/passport');
+/* create admin if not exists */
+createAdminIfNot();
 
 /* registering routes */
 app.use("/api", require("./routes/index"));

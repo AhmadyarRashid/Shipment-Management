@@ -1,0 +1,27 @@
+<mat-toolbar>
+  <button type="button" mat-button  class="title">
+    <mat-icon (click)="drawer.toggle()">menu</mat-icon><span>Shipment Managment System</span>
+  </button>
+</mat-toolbar>
+
+<mat-drawer-container class="example-container" autosize>
+  <mat-drawer #drawer class="example-sidenav sidenav" mode="side">
+    <p class="item" routerLink="../all-worker" style="margin-top: 25px">
+      <mat-icon class="icon">supervisor_account</mat-icon>
+      Worker
+    </p>
+    <p class="item" routerLink="../all-shipment">
+      <mat-icon class="icon">flight</mat-icon>
+      Shipment
+    </p>
+    <p class="item" (click)="logoutHandler()">
+      <mat-icon class="icon">exit_to_app</mat-icon>
+      Logout
+    </p>
+  </mat-drawer>
+
+  <div class="example-sidenav-content">
+    <ng-content></ng-content>
+  </div>
+</mat-drawer-container>
+
