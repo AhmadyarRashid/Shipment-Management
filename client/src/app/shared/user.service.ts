@@ -18,20 +18,23 @@ export class UserService {
     this.token = localStorage.getItem('token');
     this.header = new HttpHeaders({
       'Content-Type': 'application/json',
-      'Authorization': 'Token ' + this.token
+      'Authorization': 'Token ' + localStorage.getItem('token')
     });
     this.option = {headers: this.header};
   }
 
   registerWorker(worker) {
+    this.setHttpHeader()
     return this.http.post(this.baseUrl + 'registerWorker', worker, this.option);
   }
 
   getAllWorker() {
+    this.setHttpHeader()
     return this.http.get(this.baseUrl + 'getAllWorker', this.option);
   }
 
   deleteWorker(id: any) {
+    this.setHttpHeader()
     return this.http.post(this.baseUrl + `deleteWorker`, {id}, this.option);
   }
 
@@ -40,6 +43,7 @@ export class UserService {
   }
 
   logout() {
+    this.setHttpHeader()
     return this.http.post(this.baseUrl + 'logout', {
       token: localStorage.getItem('token'),
       id: localStorage.getItem('id')
