@@ -1,5 +1,6 @@
 const shipment = require('../models/ship');
 const { getFailureResponse, getSuccessResponse } = require("../helpers/response");
+var shipLock = [];
 
 module.exports.getAllShipments = (req, res, next) => {
     shipment.find({})
@@ -65,37 +66,53 @@ module.exports.getAllShipmentsByUserId = (req, res, next) => {
 module.exports.updateShipmentStatus = (req, res, next) => {
     const { id, status } = req.body;
 
-    const allActiveHandler = process._getActiveHandles();
-    const isAnyRequestAvailable = allActiveHandler[3];
+    // const allActiveHandler = process._getActiveHandles();
+    // const isAnyRequestAvailable = allActiveHandler[3];
+
+    const filterId = shipLock.filter(item => item == id);
+    if (filterId.length > 0) {
+        res.status(200).json(getFailureResponse('This shipment is already been requeted'));
+    } else {
+        shipLock.push(id);
+
+        shipment.findOne({ _id: id, status: true })
+            .then(doc => {
+                if (doc == null) {
+                    res.status(200).json(getFailureResponse('Shipment is already closed'));
+                } else {
+
+
+                    const random = Math.floor(Math.random() * 60) + 1; // generate random number between 0-60
+                    console.log('----- random sec ----', random);
+                    setTimeout(() => {
+                        shipment.findOneAndUpdate({ _id: id }, { $set: { status: status } })
+                            .then(doc => {
+                                res.status(200).json(getSuccessResponse(doc));
+                            })
+                            .catch(err => {
+                                res.status(200).json(getFailureResponse('error on get shipment by user id'))
+                            });
+
+                        shipLock = shipLock.filter(item => item !== id);
+                    }, random * 1000);
+                }
+
+            })
+            .catch(err => {
+                console.log(err);
+                res.status(200).json(getFailureResponse('Shipment is already closed'));
+            });
+    }
+
+
+
     // console.log('----- request in queue ----', isAnyRequestAvailable);
     // if(isAnyRequestAvailable){ // if any timer request in queue
     //     res.status(200).json(getFailureResponse('This shipment is already been requeted'));
     // }else{
-        // timer request in queue
-        shipment.findOne({_id : id, status: true})
-        .then(doc => {
-            if(doc == null){
-                res.status(200).json(getFailureResponse('Shipment is already closed'));
-            }else{
-                const random = Math.floor(Math.random() * 60) + 1; // generate random number between 0-60
-                console.log('----- random sec ----', random);
-                setTimeout(() => {
-                    shipment.findOneAndUpdate({ _id: id }, { $set: { status: status } })
-                        .then(doc => {
-                            res.status(200).json(getSuccessResponse(doc));
-                        })
-                        .catch(err => {
-                            res.status(200).json(getFailureResponse('error on get shipment by user id'))
-                        });
-                }, random * 1000);
-            }
-            
-        })
-        .catch(err => {
-            console.log(err);
-            res.status(200).json(getFailureResponse('Shipment is already closed'));
-        });
+    // timer request in queue
+
     // }
-   
-   
+
+
 };
