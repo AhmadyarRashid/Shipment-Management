@@ -7,11 +7,12 @@ import {AddWorkerComponent} from '../add-worker/add-worker.component';
 import {UserService} from '../../shared/user.service';
 import Swal from 'sweetalert2';
 
+// create schema of all worker table data
 export interface WorkerSchema {
   _id: string;
   name: string;
   email: string;
-  phoneNo: string;
+  city: string;
 }
 
 @Component({
@@ -22,7 +23,9 @@ export interface WorkerSchema {
 
 export class AllWorkerComponent implements OnInit {
 
-  displayedColumns: string[] = ['_id', 'name', 'email', 'phoneNo', 'delete'];
+  // set table header
+  displayedColumns: string[] = ['_id', 'name', 'email', 'city', 'delete'];
+  // initialization
   dataSource: MatTableDataSource<WorkerSchema>;
   workers = [];
 
@@ -34,12 +37,14 @@ export class AllWorkerComponent implements OnInit {
     this.dataSource = new MatTableDataSource(this.workers);
   }
 
+  // on component render first time
   ngOnInit() {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
     this.getAllWorker();
   }
 
+  // get all worker using service
   getAllWorker() {
     this.userService.getAllWorker().subscribe(
       result => {
@@ -47,7 +52,7 @@ export class AllWorkerComponent implements OnInit {
         this.dataSource.data = result['data'];
       },
       error => {
-        // this.errors = error;
+        console.log(error);
       },
       () => {
         // 'onCompleted' callback.
@@ -55,6 +60,7 @@ export class AllWorkerComponent implements OnInit {
     );
   }
 
+  // filter table data
   applyFilter(filterValue: string) {
     this.dataSource.filter = filterValue.trim().toLowerCase();
 
@@ -63,9 +69,9 @@ export class AllWorkerComponent implements OnInit {
     }
   }
 
+  // delete worker
   handlerDelete(id) {
     console.log('--- delete user id ---', id);
-
     Swal.fire({
       title: 'Are you sure?',
       text: 'You won\'t be able to revert this!',
@@ -90,6 +96,7 @@ export class AllWorkerComponent implements OnInit {
     });
   }
 
+  // add new worker
   addWorkerHandler() {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.data = {name: 'some name'};

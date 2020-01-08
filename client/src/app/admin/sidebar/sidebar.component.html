@@ -1,22 +1,29 @@
 <mat-toolbar>
-  <button type="button" mat-button  class="title">
-    <mat-icon (click)="drawer.toggle()">menu</mat-icon><span>Shipment Managment System</span>
+  <button type="button" mat-button class="title">
+    <mat-icon (click)="drawer.toggle()">menu</mat-icon>
+    <span>Shipment Managment System</span>
   </button>
 </mat-toolbar>
 
 <mat-drawer-container class="example-container" autosize>
   <mat-drawer #drawer class="example-sidenav sidenav" mode="side">
-    <p class="item" routerLink="../all-worker" style="margin-top: 25px">
+    <p class="item first-item" routerLink="../all-worker">
       <mat-icon class="icon">supervisor_account</mat-icon>
-      Worker
+      <span class="list-item">
+         Worker
+      </span>
     </p>
     <p class="item" routerLink="../all-shipment">
       <mat-icon class="icon">flight</mat-icon>
+      <span class="list-item">
       Shipment
+      </span>
     </p>
     <p class="item" (click)="logoutHandler()">
       <mat-icon class="icon">exit_to_app</mat-icon>
+      <span class="list-item">
       Logout
+      </span>
     </p>
   </mat-drawer>
 

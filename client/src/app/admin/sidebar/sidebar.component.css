@@ -1,27 +1,37 @@
-.sidenav{
+.sidenav {
   background: #384452;
   color: white;
   width: 200px;
 }
 
-mat-toolbar{
+mat-toolbar {
   background-color: #384452;
   color: white;
 }
 
-.title{
+.title {
   font-size: 20px;
 }
 
-mat-icon{
+mat-icon {
   margin-right: 12px;
 }
 
-.example-container{
+.example-container {
   height: 100%;
 }
 
-.item{
+.item {
+  padding: 8px;
   margin-left: 15px;
+  display: flex;
+  flex-direction: row;
 }
 
+.list-item {
+  margin-top: 3px;
+}
+
+.first-item{
+  margin-top: 15px;
+}

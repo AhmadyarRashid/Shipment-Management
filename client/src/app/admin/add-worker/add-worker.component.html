@@ -1,53 +1,55 @@
-<table class="example-full-width" cellspacing="0">
-  <tr>
-    <td>
-      <mat-form-field class="example-full-width">
-        <input matInput type="text" [(ngModel)]="firstName"  placeholder="First name">
-      </mat-form-field>
-    </td>
-    <td>
-      <mat-form-field class="example-full-width">
-        <input matInput type="text" [(ngModel)]="lastName" placeholder="Last Name">
-      </mat-form-field>
-    </td>
-  </tr>
-</table>
+<form #addWorker="ngForm" (submit)="addWorkerHandler(addWorker.value , $event)">
+  <table class="example-full-width" cellspacing="0">
+    <tr>
+      <td>
+        <mat-form-field class="example-full-width">
+          <input matInput type="text" name="firstName" placeholder="First name" required ngModel>
+        </mat-form-field>
+      </td>
+      <td>
+        <mat-form-field class="example-full-width">
+          <input matInput type="text" name="lastName" placeholder="Last Name" required ngModel>
+        </mat-form-field>
+      </td>
+    </tr>
+  </table>
 
-<p>
-  <mat-form-field class="example-full-width">
-    <textarea matInput type="text" [(ngModel)]="address" placeholder="Address"></textarea>
-  </mat-form-field>
-</p>
+  <p>
+    <mat-form-field class="example-full-width">
+      <textarea matInput type="text" name="address" placeholder="Address" ngModel></textarea>
+    </mat-form-field>
+  </p>
 
-<table class="example-full-width" cellspacing="0">
-  <tr>
-    <td>
-      <mat-form-field class="example-full-width">
-        <input matInput type="text" [(ngModel)]="city" placeholder="City">
-      </mat-form-field>
-    </td>
-    <td>
-      <mat-form-field class="example-full-width">
-        <input matInput #postalCode maxlength="5" type="text" placeholder="Postal Code">
-        <mat-hint align="end">{{postalCode.value.length}} / 5</mat-hint>
-      </mat-form-field>
-    </td>
-  </tr>
-</table>
-
-
-<p>
-  <mat-form-field class="example-full-width">
-    <input matInput type="email" [(ngModel)]="email" placeholder="Email"/>
-  </mat-form-field>
-</p>
-
-<p>
-  <mat-form-field class="example-full-width">
-    <input matInput type="password" [(ngModel)]="password" placeholder="Password"/>
-  </mat-form-field>
-</p>
+  <table class="example-full-width" cellspacing="0">
+    <tr>
+      <td>
+        <mat-form-field class="example-full-width">
+          <input matInput type="text" name="city" placeholder="City" required ngModel>
+        </mat-form-field>
+      </td>
+      <td>
+        <mat-form-field class="example-full-width">
+          <input matInput #postalCode maxlength="5" name="postalCode" type="text" placeholder="Postal Code" ngModel>
+          <mat-hint align="end">{{postalCode.value.length}} / 5</mat-hint>
+        </mat-form-field>
+      </td>
+    </tr>
+  </table>
 
 
-<button mat-flat-button (click)="close()" color="primary">Save</button>
+  <p>
+    <mat-form-field class="example-full-width">
+      <input matInput type="email" name="email" placeholder="Email" required ngModel/>
+    </mat-form-field>
+  </p>
 
+  <p>
+    <mat-form-field class="example-full-width">
+      <input matInput type="password" name="password" placeholder="Password" min="5" required ngModel/>
+    </mat-form-field>
+  </p>
+
+
+  <button mat-flat-button type="submit" color="primary">Save</button>
+
+</form>

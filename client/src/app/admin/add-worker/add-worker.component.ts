@@ -8,34 +8,30 @@ import {MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 })
 export class AddWorkerComponent implements OnInit {
   dialogData: any;
-  firstName: string;
-  lastName: string;
-  address: string;
-  city: string;
-  postalCode: string;
-  email: string;
-  password: string;
 
   constructor(public dialogRef: MatDialogRef<AddWorkerComponent>, @Inject(MAT_DIALOG_DATA) public data: any) {
   }
 
-  ngOnInit() {
-    this.dialogData = this.data;
-    console.log(this.dialogData);
-  }
+  ngOnInit() {}
 
-  close() {
+  // add new worker handler
+  addWorkerHandler(value, event: Event) {
+    event.preventDefault();
     this.dialogData = {
-      firstName: this.firstName,
-      lastName: this.lastName,
-      phoneNo: '123',
-      email: this.email,
-      password: this.password,
-      city: this.city,
-      postalCode: this.postalCode,
-      address: this.address
+      firstName: value.firstName,
+      lastName: value.lastName,
+      email: value.email,
+      password: value.password,
+      city: value.city,
+      postalCode: value.postalCode,
+      address: value.address
     };
-    this.dialogRef.close(this.dialogData);
+    if (value.password && value.firstName && value.lastName && value.city && value.email) {
+      this.dialogRef.close(this.dialogData);
+    } else {
+      console.log('----- form not be able to submit ----');
+    }
+
   }
 
 }

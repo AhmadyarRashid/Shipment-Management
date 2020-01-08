@@ -10,6 +10,7 @@ import {ShipmentService} from '../../shared/shipment.service';
 import {UserService} from '../../shared/user.service';
 import Swal from 'sweetalert2';
 
+// interface  of shipment to render data in datatable
 export interface ShipmentSchema {
   id: string;
   name: string;
@@ -25,11 +26,10 @@ export interface ShipmentSchema {
 })
 export class AllShipmentComponent implements OnInit {
 
+  // set table header
   displayedColumns: string[] = ['id', 'name', 'description', 'status', 'action'];
-  toppings = new FormControl();
-  toppingList: string[] = ['Extra cheese', 'Mushroom', 'Onion', 'Pepperoni', 'Sausage', 'Tomato'];
+  // Initialization of datatable, shipment list and all worker list
   dataSource: MatTableDataSource<ShipmentSchema>;
-
   shipments = [];
   allWorkers = [];
 
@@ -44,10 +44,12 @@ export class AllShipmentComponent implements OnInit {
   ngOnInit() {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
+    // get all shipments and worker from service
     this.getAllShipments();
     this.getAllWorkers();
   }
 
+  // get all shipment data and store in shipment list
   getAllShipments() {
     this.shipmentService.getAllShipments().subscribe(res => {
       console.log('--- get all shipments --', res['data']);
@@ -55,12 +57,14 @@ export class AllShipmentComponent implements OnInit {
     });
   }
 
+  // get all worker data and store in worker list
   getAllWorkers() {
     this.userService.getAllWorker().subscribe(res => {
       this.allWorkers = res['data'];
     });
   }
 
+  // filter handler of data table
   applyFilter(filterValue: string) {
     this.dataSource.filter = filterValue.trim().toLowerCase();
 
@@ -69,6 +73,7 @@ export class AllShipmentComponent implements OnInit {
     }
   }
 
+  // assign shiphment to multiple worker
   handlerAssign(id) {
     const dialogConfigAssign = new MatDialogConfig();
     const prevWorkerIds = this.dataSource.data.filter(item => item['_id'] == id)[0]['workers'];
@@ -86,8 +91,10 @@ export class AllShipmentComponent implements OnInit {
     });
   }
 
+  // add new shipment dialog form open
   addShipmentHandler() {
     const dialogConfig = new MatDialogConfig();
+    dialogConfig.width = '500px';
     const dialog = this.dialog.open(AddShipmentComponent, dialogConfig);
     dialog.afterClosed().subscribe(value => {
       this.shipmentService.addShipment(value['name'], value['description']).subscribe(res => {
@@ -96,6 +103,7 @@ export class AllShipmentComponent implements OnInit {
     });
   }
 
+  // delete shipmen by id
   deleteShipmentHandler(id) {
     Swal.fire({
       title: 'Are you sure?',

@@ -8,24 +8,26 @@ import {MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 })
 export class AddShipmentComponent implements OnInit {
   dialogData: any;
-  name: string;
-  description: string;
 
   constructor(public dialogRef: MatDialogRef<AddShipmentComponent>, @Inject(MAT_DIALOG_DATA) public data: any) {
   }
 
   ngOnInit() {
-    this.dialogData = this.data;
-    console.log(this.dialogData);
   }
 
-  addSubmitHandler(value) {
-    console.log('---- form submit ---' , value);
+  // add new shipment handler
+  addSubmitHandler(value, event: Event) {
+    event.preventDefault();
     this.dialogData = {
       name: value.destination,
       description: value.description
     };
-    this.dialogRef.close(this.dialogData);
+    if (value.destination && value.description) {
+      this.dialogRef.close(this.dialogData);
+    } else {
+      console.log('---- not able to submit form---');
+    }
+
   }
 
 }

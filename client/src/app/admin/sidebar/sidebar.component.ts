@@ -15,6 +15,7 @@ export class SidebarComponent implements OnInit {
   ngOnInit() {
   }
 
+  // logout button handler to clear all browser cache
   logoutHandler() {
     this.userService.logout().subscribe(res => {
 

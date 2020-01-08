@@ -1,4 +1,4 @@
-<form #shipForm="ngForm" (submit)="addSubmitHandler(shipForm.value)">
+<form #shipForm="ngForm" (submit)="addSubmitHandler(shipForm.value, $event)">
   <p>
     <mat-form-field class="example-full-width">
       <input matInput type="text" name="destination" placeholder="Destination" minlength="3" required ngModel/>

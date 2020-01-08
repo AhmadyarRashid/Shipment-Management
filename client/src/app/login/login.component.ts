@@ -18,6 +18,7 @@ export class LoginComponent implements OnInit {
     this.error = null;
   }
 
+  // login handler check user is valid or not
   loginHandler(value) {
     console.log('--- login button click ----', value);
     this.userService.login(value.email, value.password).subscribe((res) => {

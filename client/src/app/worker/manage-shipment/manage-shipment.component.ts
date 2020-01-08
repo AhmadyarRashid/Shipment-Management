@@ -6,6 +6,7 @@ import {UserService} from '../../shared/user.service';
 import {Router} from '@angular/router';
 import swal from 'sweetalert2';
 
+// interface of shipment schema for data table
 export interface ShipmentSchema {
   _id: string;
   name: string;
@@ -20,7 +21,9 @@ export interface ShipmentSchema {
 })
 export class ManageShipmentComponent implements OnInit {
 
-  displayedColumns: string[] = ['id', 'name', 'description', 'action'];
+  // set table header
+  displayedColumns: string[] = ['id', 'destination', 'description', 'action'];
+  // initialization
   shipments = [];
   dataSource: MatTableDataSource<ShipmentSchema>;
   userId: string;
@@ -33,6 +36,7 @@ export class ManageShipmentComponent implements OnInit {
     this.dataSource = new MatTableDataSource(this.shipments);
   }
 
+  // first time call after render and also get all shipment those assign to him
   ngOnInit() {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
@@ -41,20 +45,22 @@ export class ManageShipmentComponent implements OnInit {
     this.getAllOpenShipments(this.userId);
   }
 
+  // get all user shipments and that are also be opened
   getAllOpenShipments(id) {
     this.shipmentService.getAllShipmentsByUserId(id).subscribe(res => {
       this.dataSource.data = res['data'];
     });
   }
 
+  // filter data in datatable
   applyFilter(filterValue: string) {
     this.dataSource.filter = filterValue.trim().toLowerCase();
-
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }
   }
 
+  // update status of shipments
   updateShipment(id) {
     this.shipmentService.updateShipmentStatus(id, false).subscribe(res => {
       console.log(res);
@@ -78,6 +84,7 @@ export class ManageShipmentComponent implements OnInit {
     });
   }
 
+  // logout handler of worker and clear all browser cache
   logoutHandler() {
     this.userService.logout().subscribe(res => {
 
