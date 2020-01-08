@@ -65,14 +65,20 @@ module.exports.getAllShipmentsByUserId = (req, res, next) => {
 module.exports.updateShipmentStatus = (req, res, next) => {
     const { id, status } = req.body;
 
-    shipment.findOne({_id : id, status: true})
+    const allActiveHandler = process._getActiveHandles();
+    const isAnyRequestAvailable = allActiveHandler[3];
+    // console.log('----- request in queue ----', isAnyRequestAvailable);
+    // if(isAnyRequestAvailable){ // if any timer request in queue
+    //     res.status(200).json(getFailureResponse('This shipment is already been requeted'));
+    // }else{
+        // timer request in queue
+        shipment.findOne({_id : id, status: true})
         .then(doc => {
-            
-            console.log('-- doc ---', doc);
             if(doc == null){
                 res.status(200).json(getFailureResponse('Shipment is already closed'));
             }else{
-                const random = Math.floor(Math.random() * 60) + 1;
+                const random = Math.floor(Math.random() * 60) + 1; // generate random number between 0-60
+                console.log('----- random sec ----', random);
                 setTimeout(() => {
                     shipment.findOneAndUpdate({ _id: id }, { $set: { status: status } })
                         .then(doc => {
@@ -89,5 +95,7 @@ module.exports.updateShipmentStatus = (req, res, next) => {
             console.log(err);
             res.status(200).json(getFailureResponse('Shipment is already closed'));
         });
+    // }
+   
    
 };
