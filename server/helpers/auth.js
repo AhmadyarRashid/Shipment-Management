@@ -2,6 +2,7 @@ const jwt = require('express-jwt');
 const { getFailureResponse, getSuccessResponse } = require('./response');
 const user = require('../models/user');
 
+// get token from header
 const getTokenFromHeaders = (req) => {
   const auth = req.get('Authorization');
 
@@ -11,6 +12,7 @@ const getTokenFromHeaders = (req) => {
   return null;
 };
 
+// check that request is generated from worker or not
 const authenticateWorker = (req, res, next) => {
   const tokenH = getTokenFromHeaders(req);
   if (tokenH == null) {
@@ -27,9 +29,9 @@ const authenticateWorker = (req, res, next) => {
   }
 }
 
+// check that request is generated from admin or not
 const authenticateAdmin = (req, res, next) => {
   const tokenH = getTokenFromHeaders(req);
-  // console.log('----- authentication ----', tokenH);
   if (tokenH == null) {
     res.status(404).json(getFailureResponse('admin authentication failed'));
   } else {

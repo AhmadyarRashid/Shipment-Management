@@ -3,6 +3,7 @@ const router = express.Router();
 const shipmentController = require('../controllers/shipmentController');
 const { authenticateAdmin, authenticateWorker } = require('../helpers/auth');
 
+// router with middleware
 router.get('/getAllShipments', authenticateAdmin, shipmentController.getAllShipments);
 router.post('/addShipment', authenticateAdmin, shipmentController.addShipment);
 router.post('/assignWorkers', authenticateAdmin, shipmentController.assignWorkers);

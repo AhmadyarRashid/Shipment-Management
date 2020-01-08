@@ -2,6 +2,7 @@ const shipment = require('../models/ship');
 const { getFailureResponse, getSuccessResponse } = require("../helpers/response");
 var shipLock = [];
 
+// get all shipments data from db
 module.exports.getAllShipments = (req, res, next) => {
     shipment.find({})
         .then(doc => {
@@ -12,35 +13,32 @@ module.exports.getAllShipments = (req, res, next) => {
         });
 }
 
+// add new shipment into db
 module.exports.addShipment = (req, res, next) => {
     const { name, description } = req.body;
-    console.log('--add shipments ----', name, description);
     shipment.create({
         name,
         description
     }).then(doc => {
-        console.log('----- saved ----', doc);
         res.status(200).json(getSuccessResponse(doc));
     }).catch(err => {
-        console.log('---- err -----', err);
         res.status(200).json(getFailureResponse('error on add shipment'));
     });
 }
 
+// assign worker to specific shipment
 module.exports.assignWorkers = (req, res, next) => {
     const { id, workerList } = req.body;
-    console.log('assign worker ----', id, workerList);
     shipment.findOneAndUpdate({ _id: id }, { $set: { workers: workerList } })
         .then(doc => {
-            console.log('---- updated ---', doc);
             res.status(200).json(getSuccessResponse(doc));
         })
         .catch(err => {
-            console.log('---- error ---', err);
             res.status(200).json(getFailureResponse('error on update user list'))
         })
 }
 
+// delete shipment by id
 module.exports.deleteShipment = (req, res, next) => {
     const { id } = req.body;
     shipment.findByIdAndDelete(id)
@@ -52,6 +50,7 @@ module.exports.deleteShipment = (req, res, next) => {
         })
 }
 
+// get all shipment data of specific user
 module.exports.getAllShipmentsByUserId = (req, res, next) => {
     const { id } = req.params;
     shipment.find({ status: true, 'workers': { $eq: id } })
@@ -63,12 +62,12 @@ module.exports.getAllShipmentsByUserId = (req, res, next) => {
         })
 }
 
+// update shipment status by assign worker
 module.exports.updateShipmentStatus = (req, res, next) => {
     const { id, status } = req.body;
 
-    // const allActiveHandler = process._getActiveHandles();
-    // const isAnyRequestAvailable = allActiveHandler[3];
-
+    /*Ensure that whenever the endpoint is hit the updateShipment function 
+    is called at least once with the corresponding ID and status passed to it.*/
     const filterId = shipLock.filter(item => item == id);
     if (filterId.length > 0) {
         res.status(200).json(getFailureResponse('This shipment is already been requeted'));
@@ -81,9 +80,10 @@ module.exports.updateShipmentStatus = (req, res, next) => {
                     res.status(200).json(getFailureResponse('Shipment is already closed'));
                 } else {
 
-
+                    /* Whenever the function is called it will generate a random number between 1 and 60. 
+                    The function will then wait for a number of seconds equal to the random number. 
+                    After the timeout, the function will call the db to update the status of the shipment.*/
                     const random = Math.floor(Math.random() * 60) + 1; // generate random number between 0-60
-                    console.log('----- random sec ----', random);
                     setTimeout(() => {
                         shipment.findOneAndUpdate({ _id: id }, { $set: { status: status } })
                             .then(doc => {
@@ -103,16 +103,4 @@ module.exports.updateShipmentStatus = (req, res, next) => {
                 res.status(200).json(getFailureResponse('Shipment is already closed'));
             });
     }
-
-
-
-    // console.log('----- request in queue ----', isAnyRequestAvailable);
-    // if(isAnyRequestAvailable){ // if any timer request in queue
-    //     res.status(200).json(getFailureResponse('This shipment is already been requeted'));
-    // }else{
-    // timer request in queue
-
-    // }
-
-
 };

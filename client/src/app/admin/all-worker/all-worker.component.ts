@@ -102,11 +102,7 @@ export class AllWorkerComponent implements OnInit {
     dialogConfig.data = {name: 'some name'};
     const dialog = this.dialog.open(AddWorkerComponent, dialogConfig);
     dialog.afterClosed().subscribe(value => {
-      const workerData = {...value, name: value.firstName + ' ' + value.lastName};
-      this.userService.registerWorker(workerData).subscribe(res => {
-        console.log('---- register user ---', res);
         this.getAllWorker();
-      });
     });
   }
 }

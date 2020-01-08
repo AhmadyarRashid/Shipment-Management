@@ -7,6 +7,7 @@ const user = require('../models/user');
 const validateRegisterInput = require("../validation/register");
 const validateLoginInput = require("../validation/login");
 
+// login controller to validate login credential after succeefully validate it will return token
 module.exports.login = (req, res, next) => {
     const { email, password } = req.body;
 
@@ -34,21 +35,30 @@ module.exports.login = (req, res, next) => {
         });
 }
 
+// register new worker
 module.exports.registerWorker = async (req, res, next) => {
 
     const { name, phoneNo, email, password, city, address } = req.body;
-
     const finalUser = new user({ name, phoneNo, email, password, city, address });
 
-    finalUser.setPassword(password);
-
-    return finalUser.save()
-        .then(() => {
-            console.log('--- reg data ---', finalUser.toAuthJSON())
-            res.json(req.body);
+    // check if user is already exist or not
+    user.findOne({email})
+        .then(doc => {
+            if(doc){ // email is already exists
+                res.status(200).json(getFailureResponse('this email is already exists'));
+            }else{ // no email exists 
+                // calculate hash of password and store it
+                finalUser.setPassword(password);
+                // now register new user
+                return finalUser.save()
+                    .then(() => {
+                        res.json(req.body);
+                    });
+            }
         });
 }
 
+// get all worker details
 module.exports.getAllWorker = (req, res, next) => {
 
     user.find({ role: 'worker' })
@@ -60,8 +70,8 @@ module.exports.getAllWorker = (req, res, next) => {
         });
 }
 
+// delete worker by worker id
 module.exports.deleteWorker = (req, res, next) => {
-    // console.log('--- delete user ---', req.body);
     user.findOneAndDelete({ _id: req.body.id })
         .then(doc => {
             if (!doc) {
@@ -78,6 +88,7 @@ module.exports.deleteWorker = (req, res, next) => {
         });
 }
 
+// logout user and remove token from db
 module.exports.logout = (req, res, next) => {
     const { id, token } = req.body;
     if(id && token){

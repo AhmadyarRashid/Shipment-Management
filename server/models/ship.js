@@ -1,6 +1,7 @@
 var mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
+// schema of shipment
 var shipmentSchema = new Schema({
     name: {
         type: String,
